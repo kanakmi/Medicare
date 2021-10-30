@@ -35,8 +35,8 @@
    DiabetesPedigreeFunction - likelihood of diabetes based on family history
    Age - age in years
    ```
-- Outputs - Yes/No (It's more of a prediction about at Risk of Diabetes or Not)
-- The model was trained using Logistic Regression and had a accuracy of around 82%.
+   - Outputs - Yes/No (It's more of a prediction about at Risk of Diabetes or Not)
+   - The model was trained using Logistic Regression and had a accuracy of around 82%.
 
 4) Heart Disease Prediction - 
    - Input Features - 
