@@ -1,5 +1,8 @@
 import pickle
 import numpy as np
+from PIL import Image
+import numpy as np
+import tensorflow as tf
 
 '''
 Input Features-
@@ -88,3 +91,52 @@ def thyroid(inputs):
     inputs = np.asarray(inputs)
     pred = model.predict(inputs.reshape(1, -1))
     return label[pred[0]]
+
+'''
+COVID Chest MRI Classifier
+It accepts the path of the image as input.
+It returns two things -
+1) The class of the image (COVID-19/Viral Pneumonia/Normal)
+1) The probability of the image being COVID-19/Viral Pneumonia/Normal
+'''
+
+# global variable that will be used to store the interpreter
+covid_interpreter = None
+
+def input_covid_classifier():
+    # function to read the model from disk
+    global covid_interpreter
+    covid_interpreter = tf.lite.Interpreter(model_path='./Saved Models/covid_classifier.tflite')
+    covid_interpreter.allocate_tensors()
+
+def classify_image(path):
+
+
+    labels = {0: "covid", 1: "viral_pneumonia", 2: "normal"}
+
+    if covid_interpreter==None:
+        input_covid_classifier()
+
+    input_details = covid_interpreter.get_input_details()
+    output_details = covid_interpreter.get_output_details()
+
+    input_shape = input_details[0]['shape']
+    output_shape = output_details[0]['shape']
+    
+    image = Image.open(path)
+    image = image.convert("RGB")
+    image = image.resize((256, 256))
+    image = np.array(image)
+
+    img = image.astype('Float32')
+    img = img/255
+    img = img.reshape((1, 256, 256, 3))
+    covid_interpreter.set_tensor(input_details[0]['index'], img)
+    covid_interpreter.invoke()
+    predictions = covid_interpreter.get_tensor(output_details[0]['index'])
+    pred = np.argmax(predictions[0])
+    result = {
+        'class': labels[pred],
+        'class_probablity': np.round(predictions[0][pred]*100,2)
+    }
+    return result
