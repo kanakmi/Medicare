@@ -108,19 +108,17 @@ It returns two things -
 covid_interpreter = None
 
 def input_covid_classifier():
-    pass
     # function to read the model from disk
+    global covid_interpreter
+    covid_interpreter = tf.lite.Interpreter(model_path=BASE_DIR/'Saved Models/covid_classifier.tflite')
+    covid_interpreter.allocate_tensors()
 
 def covid(path):
 
     labels = {0: "covid", 1: "viral_pneumonia", 2: "normal"}
 
-    global covid_interpreter
-    covid_interpreter = tf.lite.Interpreter(model_path=BASE_DIR/'Saved Models/covid_classifier.tflite')
-    covid_interpreter.allocate_tensors()
-    input_covid_classifier()
     if covid_interpreter==None:
-        pass
+        input_covid_classifier()
 
     input_details = covid_interpreter.get_input_details()
     output_details = covid_interpreter.get_output_details()
@@ -160,7 +158,7 @@ tumor_interpreter = None
 def input_tumor_classifier():
     # function to read the model from disk
     global tumor_interpreter
-    tumor_interpreter = tf.lite.Interpreter(model_path=BASE_DIR/'Saved Models/brain_tumor_classifier.tflite')
+    tumor_interpreter = tf.lite.Interpreter(model_path='./Saved Models/brain_tumor_classifier.tflite')
     tumor_interpreter.allocate_tensors()
 
 def tumor(path):
