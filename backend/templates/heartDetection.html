@@ -9,85 +9,229 @@
     <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
-        body{
-            display: flex;
-
-        }
-        *{
+        * {
             margin: 0;
             padding: 0;
-            font-family: Roboto;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
         }
-        .leftpannel{
-            height: 100vh;
-            width: 20vw;
-            background-color: #ffffff;
-            border-right: 1px solid #e4e9f0;
+
+        .sidebar {
             position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #11101D;
+            padding: 6px 14px;
+            z-index: 99;
+            transition: all 0.5s ease;
         }
-        .proilecont{
-            height: 30vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+
+        .sidebar.open {
+            width: 250px;
         }
-        .profile_picture{
-            height: 70px;
-            width: 70px;
-            background-color: white;
-            border: 0.1px solid rgba(0, 0, 0, 0.315);
-            border-radius: 50%;
-            margin-bottom: 10px;
-            box-shadow: 0px 0px 10px #e4e9f0;
-            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .profilename{
-            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .container{
-            margin-left: 15vw;
-            height: 100vh;
-            width: 80%;
-        }
-        .navs{
-            height: 70vh;
-            width: 100%;
-            padding-top: 40px;
-        }
-        .nav{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            list-style: none;
-        }
-        .nav > li{
+
+        .sidebar .logo-details {
             height: 60px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            padding-top: 20px;
+            color: #fff;
+            font-size: 20px;
             font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 22px;
+            transition: all 0.4s ease;
+            font-size: 23px;
+            text-align: center;
             cursor: pointer;
+            transition: all 0.5s ease;
         }
-        .active{
-            background-color: #1a55e3;
-            color: white;
-            width: 97%;
+
+        .sidebar.open .logo-details #btn {
+            text-align: right;
         }
-        .nav > li:hover{
-            box-shadow: 0px 0px 20px #e4e9f0;
+
+        .sidebar i {
+            color: #fff;
+            height: 60px;
+            min-width: 50px;
+            font-size: 28px;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .sidebar .nav-list {
+            margin-top: 20px;
+            height: 100%;
+        }
+
+        .sidebar li {
+            position: relative;
+            margin: 8px 0;
+            list-style: none;
+        }
+
+        .sidebar li .tooltip {
+            position: absolute;
+            top: -20px;
+            left: calc(100% + 15px);
+            z-index: 3;
+            background: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 400;
+            opacity: 0;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: 0s;
+        }
+
+        .sidebar li:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.4s ease;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .sidebar.open li .tooltip {
+            display: none;
+        }
+
+        .sidebar li a {
+            display: flex;
+            height: 100%;
             width: 100%;
+            border-radius: 12px;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            background: #11101D;
         }
-        .logout{
+
+        .sidebar li a:hover {
+            background: #FFF;
+        }
+
+        .sidebar li a .links_name {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 400;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+        }
+
+        .sidebar.open li a .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar li a:hover .links_name,
+        .sidebar li a:hover i {
+            transition: all 0.5s ease;
+            color: #11101D;
+        }
+
+        .sidebar li i {
+            height: 50px;
+            line-height: 50px;
+            font-size: 18px;
+            border-radius: 12px;
+        }
+
+        .sidebar li.profile {
+            position: fixed;
+            height: 60px;
+            width: 78px;
+            left: 0;
+            bottom: -8px;
+            padding: 10px 14px;
+            background: #1d1b31;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .sidebar .profile #log_out {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: #1d1b31;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 0px;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .profile #log_out {
+            width: 50px;
+            background: none;
+        }
+
+        .home-section {
+            position: relative;
+            background: #E4E9F7;
+            min-height: 100vh;
+            top: 0;
+            left: 78px;
+            width: calc(100% - 78px);
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            display: inline-block;
+            color: #11101d;
+            font-size: 25px;
+            font-weight: 500;
+            margin: 18px
+        }
+
+        @media (max-width: 420px) {
+            .sidebar li .tooltip {
+                display: none;
+            }
+        }
+
+        .logout {
             position: absolute;
             float: right;
             right: 30px;
@@ -101,21 +245,30 @@
             justify-content: center;
             overflow: hidden;
         }
-        .logout .logout-text{
+
+        .logout .logout-text {
             display: none;
         }
-        .logout:hover .logout-text{
+
+        .logout:hover .logout-text {
             display: block;
         }
-        .logout:hover{
+
+        .logout:hover {
             justify-content: space-around;
             animation: logout-expand;
             animation-duration: 0.4s;
             animation-fill-mode: forwards;
         }
+
         @keyframes logout-expand {
-            from{width: 30px;}
-            to{width: 100px;}
+            from {
+                width: 30px;
+            }
+
+            to {
+                width: 100px;
+            }
         }
 
         .covidresult {
@@ -286,7 +439,8 @@
         .form-group:not(:last-child) {
             margin-bottom: 32px;
         }
-        .overlay{
+
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -304,22 +458,52 @@
 </head>
 
 <body>
-    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
-    <div class="leftpannel">
-        <div class="proilecont">
-            <div class="profile_picture"></div>
-            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
-            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+    <a href="/logout">
+        <div class="logout">
+            <p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i>
         </div>
-        <div class="navs">
-            <ul class="nav">
-                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
-                <li class="active" onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: white;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
-                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
-                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
-                <li onclick="location.href='/chat';"><i class="far fa-comments" style="color: blue;"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
-            </ul>
+    </a>
+    <div class="sidebar">
+        <div class="logo-details">
+            <div class="logo_name">Medicare</div>
+            <i class='bx bx-menu' id="btn"></i>
         </div>
+        <ul class="nav-list">
+            <li>
+                <a href="/">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="/diagnose">
+                    <i class='fas fa-diagnoses'></i>
+                    <span class="links_name">Diagnose</span>
+                </a>
+                <span class="tooltip">Diagnose</span>
+            </li>
+            <li>
+                <a href="/blog">
+                    <i class='bx bxl-blogger'></i>
+                    <span class="links_name">Blog</span>
+                </a>
+                <span class="tooltip">Blog</span>
+            </li>
+            <li>
+                <a href="/chat">
+                    <i class='bx bxs-chat'></i>
+                    <span class="links_name">Chatroom</span>
+                </a>
+                <span class="tooltip">Chatroom</span>
+            </li>
+
+            <li class="profile">
+                <a href="/signout">
+                    <i class='bx bx-log-out' id="log_out"></i>
+                </a>
+            </li>
+        </ul>
     </div>
     <div class="container">
         <form action="" method="post">
@@ -428,12 +612,43 @@
     <div class="overlay">
         {{ data }}
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+
     <script>
-        setTimeout(function(){
-           window.location.href = '/diagnose';
+
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();
+        });
+
+        // console.log(Cookies.get('csrftoken'));
+
+        function menuBtnChange() {
+            if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+            } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+            }
+        }
+    </script>
+
+    <script>
+        setTimeout(function () {
+            window.location.href = '/diagnose';
         }, 3000);
-     </script>
+    </script>
     {% endif %}
-    </body>
+</body>
 
 </html>
