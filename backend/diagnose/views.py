@@ -227,7 +227,21 @@ def heartdis(request):
     return render(request,'heartDetection.html')
 
 def brain(request):
-    pass
+    if request.method=='POST':
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage(location='media/tumour')
+        filename = fs.save(myfile.name, myfile)
+        res = tumor(str(BASE_DIR)+"\\media\\tumour\\"+filename)
+        typ = res['class']
+        prob = res['class_probablity']
+        context ={
+            'data':True,
+            'type':typ,
+            'prob':prob,
+            'img':filename
+        }
+        return render(request,'tumour.html',context=context)
+    return render(request,'tumour.html')
 
 def covid_classifier(request):
     if request.method=='POST':
@@ -235,6 +249,13 @@ def covid_classifier(request):
         fs = FileSystemStorage(location='media/covid')
         filename = fs.save(myfile.name, myfile)
         res = covid(str(BASE_DIR)+"\\media\\covid\\"+filename)
-        print(res)
-        return redirect('dashboard')
+        typ = res['class']
+        prob = res['class_probablity']
+        context ={
+            'data':True,
+            'type':typ,
+            'prob':prob,
+            'img':filename
+        }
+        return render(request,'covid.html',context=context)
     return render(request,'covid.html')

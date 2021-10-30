@@ -344,8 +344,10 @@
         </form>
     </div>
     {% if data %}
-    <div class="overlay">
-        {{ data }}
+    <div class="overlay" style="flex-direction: column; justify-content: space-evenly !important;">
+        <div class="preview" id="uploadImg" style="background-image: url('/media/covid/{{ img }}');"></div>
+        <h2>{{ type }}</h2>
+        <h4>probability- {{ prob }}</h4>
     </div>
     <script>
         setTimeout(function(){
