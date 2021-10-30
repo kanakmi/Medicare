@@ -13,7 +13,7 @@ Our inspiration was to create an all-in-one health platform where people can ask
 
 ## ⚙️How we built it
 
-- ML: Python, Skikit-Learn, TensorFlow (want to know more? Click Here)
+- ML: Python, Skikit-Learn, TensorFlow (want to know more? [Click Here](https://github.com/kanakmi/Medicare/tree/main/Diagnosis%20using%20ML))
 - Frontend: HTML, CSS, JS
 - Backend: Django
 - Database: CockroachDB
@@ -50,6 +50,6 @@ Our inspiration was to create an all-in-one health platform where people can ask
 - Integrate ML models directly without creating an API with Django 
 - collaboration.
 
-## 🚀 What's next for Health Tracker
+## 🚀 What's next for Medicare
 
 Improving the accuracy of the models and adding more self-diagnosis models.
