@@ -93,7 +93,7 @@ def thyroid(inputs):
     return label[pred[0]]
 
 '''
-COVID Chest MRI Classifier
+COVID Chest X-Ray Classifier
 It accepts the path of the image as input.
 It returns two things -
 1) The class of the image (COVID-19/Viral Pneumonia/Normal)
@@ -109,8 +109,7 @@ def input_covid_classifier():
     covid_interpreter = tf.lite.Interpreter(model_path='./Saved Models/covid_classifier.tflite')
     covid_interpreter.allocate_tensors()
 
-def classify_image(path):
-
+def covid(path):
 
     labels = {0: "covid", 1: "viral_pneumonia", 2: "normal"}
 
@@ -134,6 +133,54 @@ def classify_image(path):
     covid_interpreter.set_tensor(input_details[0]['index'], img)
     covid_interpreter.invoke()
     predictions = covid_interpreter.get_tensor(output_details[0]['index'])
+    pred = np.argmax(predictions[0])
+    result = {
+        'class': labels[pred],
+        'class_probablity': np.round(predictions[0][pred]*100,2)
+    }
+    return result
+
+'''
+Brain Tumor MRI Classifier
+It accepts the path of the image as input.
+It returns two things -
+1) The class of the image (Tumor/No Tumor)
+1) The probability of the image being Tumor/No Tumor
+'''
+
+# global variable that will be used to store the interpreter
+tumor_interpreter = None
+
+def input_tumor_classifier():
+    # function to read the model from disk
+    global tumor_interpreter
+    tumor_interpreter = tf.lite.Interpreter(model_path='./Saved Models/brain_tumor_classifier.tflite')
+    tumor_interpreter.allocate_tensors()
+
+def tumor(path):
+
+    labels = {0: 'No Tumor', 1: 'Tumor'}
+
+    if tumor_interpreter==None:
+        input_tumor_classifier()
+
+    input_details = tumor_interpreter.get_input_details()
+    output_details = tumor_interpreter.get_output_details()
+
+    input_shape = input_details[0]['shape']
+    output_shape = output_details[0]['shape']
+    
+    image = Image.open(path)
+    image = image.convert("RGB")
+    image = image.resize((128, 128))
+    image = np.array(image)
+
+    img = image.astype('Float32')
+    img = img/255
+    img = img.reshape((1, 128, 128, 3))
+    tumor_interpreter.set_tensor(input_details[0]['index'], img)
+    tumor_interpreter.invoke()
+    predictions = tumor_interpreter.get_tensor(output_details[0]['index'])
     pred = np.argmax(predictions[0])
     result = {
         'class': labels[pred],
