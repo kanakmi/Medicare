@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ room }}| Chat Room</title>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        body{
+            display: flex;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+        .leftpannel{
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+        .proilecont{
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile_picture{
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .profilename{
+            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+        }
+        .navs{
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+        .nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        .nav > li{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .active{
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+        .nav > li:hover{
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+        .logout{
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logout .logout-text{
+            display: none;
+        }
+        .logout:hover .logout-text{
+            display: block;
+        }
+        .logout:hover{
+            width: 100px;
+            justify-content: space-around;
+        }
+        #style-4::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb
+        {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+        .footer{
+            height: 100px;
+            width: 100%;
+        }
+        .bfrnav{
+            margin-left: 100px;
+            margin-top: 40px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #display{
+            height: 75vh;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            border-radius: 10px;
+            align-items: center;
+            width: 80%;
+            padding-top: 40px;
+            overflow-y: scroll;
+        }
+        #display :nth-child(even){
+            background-color: rgba(218, 210, 194, 0.384);
+        }
+        .chatavatar{
+            border-radius: 50%;
+            height: 35px;
+        }
+        .endroom{
+            position: absolute;
+            top: 50px;
+            right: 210px;
+        }
+        .endrooms{
+            background-color: red;
+            color: white;
+            width: 35px;
+            border: none;
+            border-radius: 12px;
+        }
+        
+        .endrooms:hover{
+            box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.479);
+        }
+        .container_darker{
+            margin-left: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            height: 70px;
+            position: relative;
+            margin-top: 10px;
+            padding-left: 10px;
+        }
+        .container_darker>h8{
+            font-size: 14px;
+        }
+        .container_darker>span{
+            float: right;
+        }
+        .userwrap{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 30px;
+            background-color: transparent !important;
+        }
+        .message{
+            word-wrap: break-word;
+            width: 300px;
+            background-color: transparent !important;
+        }
+        #message{
+            margin-top: 10px;
+            width: 50vw;
+            height: 30px;
+        }
+        .roomTitle{
+            margin-bottom: 30px;
+            background: #7751CF;
+            background: -webkit-linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            background: -moz-linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            background: linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sendmsg{
+            height: 30px;
+            background: linear-gradient(45deg,rgb(53, 20, 172),rgb(146, 146, 197));
+            border: none;
+            width: 40px;
+        }
+        .sendmsg:hover{
+            box-shadow: 0px 0px 10px rgba(0, 0, 255, 0.534);
+        }
+    </style>
+</head>
+<body>
+    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: blue;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li class="active" onclick="location.href='/chat';"><i class="far fa-comments" style="color: rgb(231, 212, 212);"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container" style="margin-right: 100px;">
+        <div class="bfrnav">
+            <h2 class="roomTitle">{{room}}</h2>
+            {% if user == room_details.author %}
+            <span>
+              <form action="" method="post" class="endroom">
+                {% csrf_token %}
+                <input
+                  type="text"
+                  value="{{ room_details.id }}"
+                  style="display: none"
+                  name="roomid"
+                />
+                <button class="endrooms" type="submit">End</button>
+              </form>
+            </span>
+            {% endif %}
+            <div id="display"></div>
+            <div class="container2">
+    
+                <form id="post-form">
+                {% csrf_token %}
+                <input
+                    type="hidden"
+                    name="username"
+                    id="username"
+                    value="{{ username }}"
+                />
+                <input
+                    type="hidden"
+                    name="room_id"
+                    id="room_id"
+                    value="{{ room_details.id }}"
+                />
+                <input type="text" name="message" id="message" placeholder="Type Here" autocomplete="off" />
+                <input type="submit" value="Send" class="sendmsg" />
+                </form>
+          </div>
+          <img src="" alt="">
+        </div>
+        <div class="footer"></div>
+    </div>
+    <script>
+        function messageappend(temp) {
+            $("#display").append(temp);
+        }
+        $(document).ready(function () {
+          setInterval(function () {
+            $.ajax({
+              type: "GET",
+              url: "/chat/getMessages/{{room}}/",
+              success: function (response) {
+                console.log(response);
+                for (var key in response.messages) {
+                  var temp =
+                    "<div class='container_darker'><div class=\"userwrap\"><img class=\"chatavatar\" src=\"https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name="+response.messages[key].user+"\"><h8 style=\"font-size: 13px;background-color: transparent !important;\">" +
+                    response.messages[key].user.split('@')[0] +
+                    "</h8><p style=\"font-size: 10px;\">"+response.messages[key].date+"</p></div><p class=\"message\">" +
+                    response.messages[key].value +
+                    "</div>";
+                    messageappend(temp)
+                }
+              },
+              /*error: function (response) {
+                alert("An error occured");
+              },*/
+            });
+          }, 1000);
+        });
+      </script>
+    <script type="text/javascript">
+        $(document).on("submit", "#post-form", function (e) {
+        e.preventDefault();
+        var d = new Date();
+        var hour = d.getHours()
+        var min = d.getMinutes()
+        var sec = d.getSeconds()
+        var time = hour+":"+min+":"+sec;
+        $.ajax({
+            type: "POST",
+            url: "/chat/send",
+            data: {
+            username: $("#username").val(),
+            room_id: $("#room_id").val(),
+            message: $("#message").val(),
+            
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+            },
+            success: function (data) {
+                console.log(message)
+                var temp =
+                    "<div class='container_darker' style=\"float: right; margin-right: 4px;\"><p class=\"message\">" +
+                    message.value +
+                    "</p><div class=\"userwrap\"><img class=\"chatavatar\" src=\"https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name="+username.value+"\"><h8 style=\"font-size: 13px;background-color: transparent !important;\">" +
+                    username.value.split("@")[0] +
+                    "</h8><p style=\"font-size: 10px;\">"+time+"</p></div></div>";
+                    messageappend(temp)
+                    document.getElementById("message").value = "";
+            },
+        });
+        });
+  </script>
+  <script>
+    window.onbeforeunload = function() {
+       alert("End Room Before You Leave");
+    };
+  </script>
+      <script>
+        document.getElementById('profilename').innerHTML = '{{ user.first_name }}'.split('@')[0]
+    </script>
+</body>
+</html>

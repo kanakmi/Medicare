@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Rooms</title>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        body{
+            display: flex;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+        .leftpannel{
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+        .proilecont{
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile_picture{
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .profilename{
+            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+        .navs{
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+        .nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        .nav > li{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .active{
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+        .nav > li:hover{
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+        .logout{
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logout .logout-text{
+            display: none;
+        }
+        .logout:hover .logout-text{
+            display: block;
+        }
+        .logout:hover{
+            width: 100px;
+            justify-content: space-around;
+        }
+        #style-4::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb
+        {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+        .footer{
+            height: 100px;
+            width: 100%;
+        }
+        .activerooms{
+            height: 70vh;
+            width: 80%;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            border-radius: 15px;
+            margin-left: 150px;
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            grid-column-gap: 20px;
+            grid-row-gap: 20px;
+            padding-top: 80px;
+            padding-left: 70px;
+            overflow-y: scroll;
+        }
+        .room{
+            height: 200px;
+            width: 150px;
+            background-color: rgba(81, 50, 138, 0.589);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .room:hover{
+            box-shadow: 0px 0px 20px rgba(15, 15, 116, 0.575);
+        }
+        .activetitle{
+            position: absolute;
+            top:12vh;
+            margin-left: 25vw;
+            font-size: 22px;
+            background: #7751CF;
+            background: -webkit-linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            background: -moz-linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            background: linear-gradient(to top right, #7751CF 15%, #5C4614 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .activetitle::after{
+            content: "";
+            position: absolute;
+            margin-top: 28px;
+            margin-left: -140px;
+            width: 150px;
+            height: 4px;
+            background-color: yellow;
+            background: linear-gradient(45deg, rgb(21, 21, 156),rgb(27, 172, 27));
+        }
+        .createroom{
+            position: absolute;
+            margin-left: 180px;
+            margin-top: 20px;
+            background: linear-gradient(45deg,rgba(2, 2, 117, 0.767),rgb(33, 0, 179));
+            padding: 4px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .createroom:hover{
+            box-shadow: 0px 0px 10px blueviolet;
+        }
+        .crfont{
+            background: #CFC3B6;
+            background: -webkit-radial-gradient(ellipse farthest-corner at center center, #CFC3B6 0%, #BC8FCF 100%);
+            background: -moz-radial-gradient(ellipse farthest-corner at center center, #CFC3B6 0%, #BC8FCF 100%);
+            background: radial-gradient(ellipse farthest-corner at center center, #CFC3B6 0%, #BC8FCF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 18px;
+        }
+        .overlay{
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: rgba(0, 0, 0, 0.829);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 60vh;
+            color: white;
+        }
+        .close{
+            height: 30px;
+            width: 30px;
+            position: fixed;
+            top: 50px;
+            right:70px;
+            border-radius: 50%;
+            background-color: yellow;
+        }
+        #room_name{
+            width: 30vw;
+            height: 30px;
+            border-radius: 15px;
+            outline: none;
+            border: none;
+            margin-top: -80px;
+            text-align: center;
+        }
+        .close:hover{
+            box-shadow: 0px 0px 20px rgba(255, 255, 0, 0.733);
+        }
+        .create{
+            width: 200px;
+            height: 30px;
+            background: blue;
+            color: white;
+            font-size: 19px;
+            border: none;
+            border-radius: 16px;
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay">
+        <div class="close" onclick="document.getElementById('overlay').style.display = 'none'"></div>
+        <form id="post-form" method="POST" action="/chat/checkview">
+            {% csrf_token %}
+            <label>Room Name</label>
+            <input type="text" name="room_name" id="room_name" width="100px" placeholder="Room Name" />
+            <input type="submit" value="Create Room" class="create"/>
+          </form>
+    </div>
+    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: blue;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li class="active" onclick="location.href='/chat';"><i class="far fa-comments" style="color: rgb(231, 212, 212);"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="createroom" onclick="createroom()"><p class="crfont">Create Your Room</p></div>
+        <div class="activerooms">
+            <h2 class="activetitle">Active Rooms</h2>
+            {% for i in data %}
+            <div class="room" onclick="location.href='/chat/{{ i.name }}';">
+                <h3>{{ i.name }}</h3>
+                <p>{{ i.author }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="footer"></div>
+    </div>
+    <script>
+        function createroom() {
+            document.getElementById("overlay").style.display="block";
+        }
+    </script>
+        <script>
+            document.getElementById('profilename').innerHTML = '{{ user.first_name }}'.split('@')[0]
+        </script>
+</body>
+</html>

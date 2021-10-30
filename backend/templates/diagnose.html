@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        body{
+            display: flex;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+        .leftpannel{
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+        .proilecont{
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile_picture{
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .profilename{
+            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+        }
+        .navs{
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+        .nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        .nav > li{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .active{
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+        .nav > li:hover{
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+        .logout{
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logout .logout-text{
+            display: none;
+        }
+        .logout:hover .logout-text{
+            display: block;
+        }
+        .logout:hover{
+            width: 100px;
+            justify-content: space-around;
+        }
+        #style-4::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb
+        {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+        .footer{
+            height: 100px;
+            width: 100%;
+        }
+        .row1{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 15vh;
+            margin-left: 10vw;
+        }
+        .cards{
+            color: red;
+            height: 200px;
+            width: 180px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content:space-around;
+            cursor: pointer;
+        }
+
+        .cards:hover{
+            box-shadow: 0px 0px 50px #d8dfe9;
+        }
+        .fa-viruses{
+            color: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li class="active" onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: white;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li onclick="location.href='/chat';"><i class="far fa-comments" style="color: blue;"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row1">
+            <div class="cards" onclick="location.href='/diagnose/diabetes';"><i class="fas fa-circle-notch fa-4x"></i><h4>Diabetes Prediction</h4></div>
+            <div class="cards" onclick="location.href='/diagnose/thyroid';"><i class="fab fa-connectdevelop fa-4x"></i><h4>Thyroid Prediction</h4></div>
+        </div>
+        <div class="row1">
+            <div class="cards" onclick="location.href='/diagnose/heart';"><i class="fas fa-heartbeat fa-4x"></i><h4>heart Disease Prediction</h4></div>
+            <div class="cards" onclick="location.href='/diagnose/covid';"><i class="fas fa-viruses fa-4x"></i><h4>Covid Prediction</h4></div>
+            <div class="cards" onclick="location.href='/diagnose/brain';"><i class="fas fa-brain fa-4x"></i><h4>Brain Tumour Prediction</h4></div>
+        </div>
+        <div class="footer"></div>
+    </div>
+    <script>
+        document.getElementById('profilename').innerHTML = '{{ user.first_name }}'.split('@')[0]
+    </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+        body {
+            display: flex;
+
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+
+        .leftpannel {
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+
+        .proilecont {
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile_picture {
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .profilename {
+            background: -webkit-linear-gradient(45deg, rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+        }
+
+        .navs {
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav>li {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+
+        .nav>li:hover {
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+
+        .logout {
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logout .logout-text {
+            display: none;
+        }
+
+        .logout:hover .logout-text {
+            display: block;
+        }
+
+        .logout:hover {
+            justify-content: space-around;
+            animation: logout-expand;
+            animation-duration: 0.4s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes logout-expand {
+            from {
+                width: 30px;
+            }
+
+            to {
+                width: 100px;
+            }
+        }
+
+        #style-4::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+
+        h1#header {
+            text-align: center;
+            padding: 50px;
+            font-size: 62px;
+            font-family: "Pacifico";
+            text-shadow: 0 2px 2px #3c77b3;
+        }
+
+        .article-wrapper {
+            -moz-transition: width 0.4s;
+            -o-transition: width 0.4s;
+            -webkit-transition: width 0.4s;
+            transition: width 0.4s;
+        }
+
+        article {
+            position: relative;
+            padding-left: 180px;
+            padding-right: 75px;
+            height: 150px;
+            margin-bottom: 30px;
+            background-color: #FFF;
+            -moz-border-radius: 150px;
+            -webkit-border-radius: 150px;
+            border-radius: 150px;
+            cursor: pointer;
+        }
+
+        article .img-wrapper {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            -moz-border-radius: 100px;
+            -webkit-border-radius: 100px;
+            border-radius: 100px;
+            background-color: #CDE;
+            padding: 10px;
+            z-index: 1000;
+            -moz-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            -webkit-transition: all 0.2s;
+            transition: all 0.2s;
+        }
+
+        article .img-wrapper img {
+            -moz-border-radius: 100px;
+            -webkit-border-radius: 100px;
+            border-radius: 100px;
+            -moz-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            -webkit-transition: all 0.2s;
+            transition: all 0.2s;
+            width: 150px;
+        }
+
+        article h1 {
+            height: 75px;
+            line-height: 75px;
+            font-size: 24px;
+            border-bottom: 2px solid #CDE;
+            color: #428bca;
+            -moz-transition: all 0.4s;
+            -o-transition: all 0.4s;
+            -webkit-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+
+        article p {
+            color: #888;
+        }
+
+        article a {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            height: 100%;
+            line-height: 150px;
+            text-align: center;
+            width: 100%;
+            background-color: #FFF;
+            font-size: 48px;
+            font-style: italic;
+            opacity: 0;
+            color: #428bca !important;
+            -moz-transition: all 0.4s;
+            -o-transition: all 0.4s;
+            -webkit-transition: all 0.4s;
+            transition: all 0.4s;
+            text-decoration: none !important;
+            -moz-border-radius: 150px;
+            -webkit-border-radius: 150px;
+            border-radius: 150px;
+            font-family: "Pacifico";
+            text-shadow: 0 1px 1px #AAA;
+        }
+
+        article:hover .img-wrapper {
+            padding: 5px;
+            -moz-transform: rotate(5deg);
+            -ms-transform: rotate(5deg);
+            -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+        }
+
+        article:hover .img-wrapper img {
+            width: 160px;
+        }
+
+        article:hover a {
+            opacity: 1;
+        }
+
+        .bloc article {
+            padding: 10px;
+            height: 225px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            margin-top: 75px;
+        }
+
+        .bloc article .img-wrapper {
+            position: relative;
+            top: -85px;
+            width: 170px;
+            left: inherit;
+            margin: auto;
+            margin-bottom: -100px;
+        }
+
+        .bloc article h1 {
+            font-size: 14px;
+            height: 37.5px;
+            line-height: 37.5px;
+        }
+
+        .bloc article p {
+            font-size: 12px;
+        }
+
+        .bloc article a {
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            line-height: 255px;
+        }
+
+
+        .footer {
+            height: 100px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/logout">
+        <div class="logout">
+            <p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i>
+        </div>
+    </a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: blue;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li class="active" onclick="location.href='/blog';"><i class="fas fa-blog" style="color: white;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li onclick="location.href='/chat';"><i class="far fa-comments" style="color: blue;"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container list-article">
+            <div class="btn-group pull-right" id="switch-view">
+                <button class="btn btn-primary">
+                    <span class="icon-th-large"></span>
+                </button>
+                <button class="btn btn-primary active">
+                    <span class="icon-th-list"></span>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-xs-12 article-wrapper">
+                    <article>
+                        <a href="#" class="more">more</a>
+                        <div class="img-wrapper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUlsKxGIXn2EXSbS3jiKfpNfdihODT9Re0sg&usqp=CAU" alt="" /></div>
+                        <h1>Jhon Doe</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, nemo! In sunt quis non, modi minima id quaerat enim eos culpa deleniti, veritatis iusto omnis dignissimos ipsa eligendi, vitae delectus.</p>
+                    </article>
+                </div>
+                <div class="col-xs-12 article-wrapper">
+                    <article>
+                        <a href="#" class="more">more</a>
+                        <div class="img-wrapper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUlsKxGIXn2EXSbS3jiKfpNfdihODT9Re0sg&usqp=CAU" alt="" /></div>
+                        <h1>Jhon Doe</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, nemo! In sunt quis non, modi minima id quaerat enim eos culpa deleniti, veritatis iusto omnis dignissimos ipsa eligendi, vitae delectus.</p>
+                    </article>
+                </div>
+                <div class="col-xs-12 article-wrapper">
+                    <article>
+                        <a href="#" class="more">more</a>
+                        <div class="img-wrapper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUlsKxGIXn2EXSbS3jiKfpNfdihODT9Re0sg&usqp=CAU" alt="" /></div>
+                        <h1>Jhon Doe</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, nemo! In sunt quis non, modi minima id quaerat enim eos culpa deleniti, veritatis iusto omnis dignissimos ipsa eligendi, vitae delectus.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+
+
+    <script>
+        $(function () {
+            $("#switch-view").click(function () {
+                $(this).find("button").toggleClass("active");
+                $(".article-wrapper").toggleClass("bloc col-xs-12 col-xs-4");
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('profilename').innerHTML = '{{ user.first_name }}'.split('@')[0]
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Help</title>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        body{
+            display: flex;
+            overflow-x: hidden;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+        .leftpannel{
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+        .proilecont{
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile_picture{
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .profilename{
+            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+        }
+        .navs{
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+        .nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        .nav > li{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .active{
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+        .nav > li:hover{
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+        .logout{
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logout .logout-text{
+            display: none;
+        }
+        .logout:hover .logout-text{
+            display: block;
+        }
+        .logout:hover{
+            justify-content: space-around;
+            animation: logout-expand;
+            animation-duration: 0.4s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes logout-expand {
+            from{width: 30px;}
+            to{width: 100px;}
+        }
+        #style-4::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb
+        {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+        .footer{
+            height: 100px;
+            width: 100%;
+        }
+        .post{
+            height: 300px;
+            width: 80%;
+            margin-left: 12vw;
+            margin-top: 60px;
+            border-radius: 10px;
+            border: 0.1px solid rgba(0, 0, 0, 0.137);
+        }
+        .title{
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .title::after{
+            content: "";
+            position: absolute;
+            height: 2px;
+            width: 110px;
+            background: linear-gradient(45deg,blue,black);
+            margin-top: 25px;
+            margin-left: -90px;
+        }
+        .availability{
+            height: 82%;
+            width: 100%;
+            margin-top: 24px;
+        }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        .contact{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .contact>p{
+            background-color: rgba(0, 128, 0, 0.63);
+            width: 60%;
+            text-align: center;
+            border-radius: 10px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .contact>p:hover{
+            box-shadow: 0px 0px 5px #2b3a4e;
+        }
+        .overlay{
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.712);
+            backdrop-filter: blur(30);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        .cont{
+            height: 400px;
+            width: 400px;
+            background-color: rgba(43, 43, 36, 0.651);
+            background-image: url("");
+        }
+        .close{
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            background-color: yellow;
+            border-radius: 50%;
+            top: 40px;
+            right: 80px;
+            cursor: pointer;
+        }
+        .close:hover{
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.726);
+        }
+        .imgcont{
+            height: 600px;
+            width: 500px;
+            background-color: rgba(0, 0, 0, 0.308);
+            margin-left: 30vw;
+            margin-top: 5vh;
+        }
+        .donate{
+            height: 40px;
+            width: 100%;
+            margin-top: 10vh;
+            margin-left: 5vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .buttons{
+            height: 30px;
+            width: 150px;
+            text-align: center;
+            background: linear-gradient(45deg,blue,rgb(53, 83, 129),rgb(155,155,100));
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .buttons:hover{
+            box-shadow: 0px 0px 10px blue;
+        }
+    </style>
+</head>
+<body>
+    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: blue;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li class="active" onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: white;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li onclick="location.href='/chat';"><i class="far fa-comments" style="color: blue;"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="donate">
+            <div class="buttons" onclick="document.getElementById('overlay3').style.display='block'">Request Donation</div>
+            <div class="buttons"  onclick="document.getElementById('overlay4').style.display='block'"> request Blood</div>
+            <div class="buttons" onclick="document.getElementById('overlay5').style.display='block'"> Donate Blood</div>
+        </div>
+        <div class="post">
+            <h4 class="title">Blood Bank</h4>
+            <div class="availability">
+                <table>
+                    <tr>
+                        <th>Blood Group</td>
+                        <th>Hospital Name</td>
+                        <th>Quantity</td>
+                        <th>Contact</td>
+                    </tr>
+                    {% for i in blood %}
+                    <tr>
+                        <td> {{ i.group }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.quantity }} Units</td>
+                        <td><div class="contact" onclick="contact('{{ i.id }}')"><p>Get in touch</p></div> </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="post">
+            <h4 class="title">Donations</h4>
+            <div class="availability">
+                <table>
+                    <tr>
+                        <th>Name</td>
+                        <th>Disease</td>
+                        <th>View Prescription</td>
+                        <th>Ammount</td>
+                    </tr>
+                    {% for i in donation %}
+                    <tr>
+                        <td>{{ i.name.username }}</td>
+                        <td>{{ disease }}</td>
+                        <td><div class="contact" onclick="viewprescription('donations/{{ i.prescription }}')"><p style="background-color: rgb(100, 100, 214);">view</p></div></td>
+                        <td>{{ i.ammount }}</td>
+                        <td><div class="contact" onclick=""><p>Donate</p></div> </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="post">
+            <h4 class="title">Request Blood</h4>
+            <div class="availability">
+                <table>
+                    <tr>
+                        <th>Blood Group</td>
+                        <th>Units</td>
+                        <th>View Prescription</td>
+                        
+                    </tr>
+                    {% for i in brequest %}
+                    <tr>
+                        <td>{{ i.group }}</td>
+                        <td>{{ i.units }}</td>
+                        <td><div class="contact" onclick="viewprescription('req_blood/{{ i.pres }}')"><p style="background-color: rgb(100, 100, 214);">view</p></div></td>
+                        <td><div class="contact" onclick=""><p>Contact</p></div> </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="close" title="Close" onclick='document.getElementById("overlay").style.display = "none";'></div>
+        <form action="" method="post" enctype="multipart/form-data" style="margin-top: 200px; display: flex; align-items: center; justify-content: space-around; flex-direction: column;">
+            {% csrf_token %}
+            <input type="text" style="display: none;" value="1" name="formid">
+            <input type="text" style="display: none;" name="Hid" id="hid" value="">
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Submit prescription </label>
+                <input type="file" accept="image/*" onchange="loadFile(event)" name="myfile" id="myfile" style="margin-left: 40px; ">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Request Quantity: </label>
+                <input type="number" name="quantity"value="0" id="quantity" style="width:40px; margin-left: 40px;">
+            </div>
+            <button type="submit" style="margin-top: 20px; width: 80px; font-size: 17px;">Request</button>
+        </form>
+    </div>
+    <div class="overlay" id="overlay2" style="display: none; position: fixed;">
+        <div class="imgcont">
+            <img src="" alt="Prescription" id="donationsimg">
+        </div>
+        <div class="close" onclick="document.getElementById('overlay2').style.display = 'none'"></div>
+    </div>
+    <div class="overlay" id="overlay3">
+        <div class="close" onclick="document.getElementById('overlay3').style.display = 'none'"></div>
+        <form action="" method="post" enctype="multipart/form-data" style="margin-top: 200px; display: flex; align-items: center; justify-content: space-around; flex-direction: column;">
+            {% csrf_token %}
+            <input type="text" style="display: none;" value="2" name="formid">
+            <input type="text" style="display: none;" name="Hid" id="hid" value="">
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Submit prescription </label>
+                <input type="file" accept="image/*" onchange="loadFile2(event)" name="myfile2" id="myfile" style="margin-left: 40px; ">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Request Money: </label>
+                <input type="text" name="money" id="money" style="width:100px; margin-left: 40px;">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Disease: </label>
+                <input type="text" name="disease"  id="disease" style="width:100px; margin-left: 40px;">
+            </div>
+            <button type="submit" style="margin-top: 20px; width: 80px; font-size: 17px;">Request</button>
+        </form>
+    </div>
+    <div class="overlay" id="overlay4">
+        <div class="close" onclick="document.getElementById('overlay4').style.display = 'none'"></div>
+        <form action="" method="post" enctype="multipart/form-data" style="margin-top: 200px; display: flex; align-items: center; justify-content: space-around; flex-direction: column;">
+            {% csrf_token %}
+            <input type="text" style="display: none;" value="3" name="formid">
+            <input type="text" style="display: none;" name="Hid" id="hid" value="">
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Submit prescription </label>
+                <input type="file" accept="image/*" onchange="loadFile3(event)" name="myfile3" id="myfile" style="margin-left: 40px; ">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Blood Group: </label>
+                <input type="text" name="bgroup" id="bgroup" style="width:100px; margin-left: 40px;">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="quantity" style="color: white">Units: </label>
+                <input type="text" name="units"  id="units" style="width:100px; margin-left: 40px;">
+            </div>
+            <button type="submit" style="margin-top: 20px; width: 80px; font-size: 17px;">Request</button>
+        </form>
+    </div>
+    <div class="overlay" id="overlay5">
+        <div class="close" onclick="document.getElementById('overlay5').style.display = 'none'"></div>
+        <form action="" method="post" enctype="multipart/form-data" style="margin-top: 50px; display: flex; align-items: center; justify-content: space-around; flex-direction: column;">
+            {% csrf_token %}
+            <input type="text" style="display: none;" value="4" name="formid">
+            <div style="display: flex; margin-top: 40px;">
+                <label for="bdgroup" style="color: white">Blood Group: </label>
+                <input type="text" name="bdgroup" id="bdgroup" style="width:100px; margin-left: 40px;">
+            </div>
+            <div style="display: flex; margin-top: 40px;">
+                <label for="hospital_name" style="color: white">Hospital Name: </label>
+                <select name="hospital_name" id="hospital_name" style="margin-left: 30px;" onchange="selecthspital(this.value)">
+                    <option value="Select Hosptial">Select hospital</option>
+                    {% for i in blood %}
+                    {% ifchanged %}<option value="{{ i.name }}">{{ i.name }}</option>{% endifchanged %}
+                    {% endfor %}
+                </select>
+                <input type="text" name="hsname" id="hsname" style="display: none;">
+                <input type="date" name="date" id="date">
+            </div>
+            <button type="submit" style="margin-top: 20px; width: 80px; font-size: 17px;">Book</button>
+        </form>
+    </div>
+    <script>
+        var request;
+        function contact(id) {
+            document.getElementById("overlay").style.display = 'block';
+            document.getElementById("hid").setAttribute('value',id)
+        }
+        var loadFile = function(event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            console.log(URL.createObjectURL(event.target.files[0]));
+            output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+        var loadFile2 = function(event) {
+            var output = document.getElementById('outputdon');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            console.log(URL.createObjectURL(event.target.files[0]));
+            output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+        var loadFile3 = function(event) {
+            var output = document.getElementById('outreqdon');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            console.log(URL.createObjectURL(event.target.files[0]));
+            output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+        function viewprescription(imgname) {
+            document.getElementById('overlay2').style.display ='block';
+            document.getElementById('donationsimg').src = '/media/'+imgname;
+
+        }
+        function selecthspital(hname){
+            document.getElementById('hsname').setAttribute('value',hname)
+        }
+    </script>
+        <script>
+            document.getElementById('profilename').innerHTML = '{{ user.first_name }}'.split('@')[0]
+        </script>
+</body>
+</html>

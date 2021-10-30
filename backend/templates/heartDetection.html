@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease</title>
+    <script src="https://kit.fontawesome.com/8744931b12.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+        body{
+            display: flex;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Roboto;
+        }
+        .leftpannel{
+            height: 100vh;
+            width: 20vw;
+            background-color: #ffffff;
+            border-right: 1px solid #e4e9f0;
+            position: fixed;
+        }
+        .proilecont{
+            height: 30vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile_picture{
+            height: 70px;
+            width: 70px;
+            background-color: white;
+            border: 0.1px solid rgba(0, 0, 0, 0.315);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0px 0px 10px #e4e9f0;
+            background: url('https://avatars.abstractapi.com/v1/?api_key=6da62740910249f583b6dd21faf16556&name={{ user.first_name }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .profilename{
+            background: -webkit-linear-gradient(45deg,rgb(0, 0, 0), rgb(153, 21, 21));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container{
+            margin-left: 15vw;
+            height: 100vh;
+            width: 80%;
+        }
+        .navs{
+            height: 70vh;
+            width: 100%;
+            padding-top: 40px;
+        }
+        .nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        .nav > li{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .active{
+            background-color: #1a55e3;
+            color: white;
+            width: 97%;
+        }
+        .nav > li:hover{
+            box-shadow: 0px 0px 20px #e4e9f0;
+            width: 100%;
+        }
+        .logout{
+            position: absolute;
+            float: right;
+            right: 30px;
+            top: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .logout .logout-text{
+            display: none;
+        }
+        .logout:hover .logout-text{
+            display: block;
+        }
+        .logout:hover{
+            justify-content: space-around;
+            animation: logout-expand;
+            animation-duration: 0.4s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes logout-expand {
+            from{width: 30px;}
+            to{width: 100px;}
+        }
+
+        .covidresult {
+            height: 500px;
+            width: 400px;
+            margin-left: 140px;
+            margin-top: 80px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 20px #e4e9f0;
+            overflow-y: scroll;
+        }
+
+        #style-4::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #style-4::-webkit-scrollbar-thumb {
+            background-color: #000000;
+            border: 2px solid #555555;
+        }
+
+        .footer {
+            height: 100px;
+            width: 100%;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding-top: 10px;
+        }
+
+        .btn {
+            padding: 10px;
+        }
+
+        :root {
+            --input-color: #99A3BA;
+            --input-border: #CDD9ED;
+            --input-background: #fff;
+            --input-placeholder: #CBD1DC;
+            --input-border-focus: #275EFE;
+            --group-color: var(--input-color);
+            --group-border: var(--input-border);
+            --group-background: #EEF4FF;
+            --group-color-focus: #fff;
+            --group-border-focus: var(--input-border-focus);
+            --group-background-focus: #678EFE;
+        }
+
+        .form-field {
+            display: block;
+            width: 100%;
+            padding: 8px 16px;
+            line-height: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            border-radius: 6px;
+            -webkit-appearance: none;
+            color: var(--input-color);
+            border: 1px solid var(--input-border);
+            background: var(--input-background);
+            transition: border 0.3s ease;
+        }
+
+        .form-field::-moz-placeholder {
+            color: var(--input-placeholder);
+        }
+
+        .form-field:-ms-input-placeholder {
+            color: var(--input-placeholder);
+        }
+
+        .form-field::placeholder {
+            color: var(--input-placeholder);
+        }
+
+        .form-field:focus {
+            outline: none;
+            border-color: var(--input-border-focus);
+        }
+
+        .form-group {
+            position: relative;
+            display: flex;
+            width: 100%;
+        }
+
+        .form-group>span,
+        .form-group .form-field {
+            white-space: nowrap;
+            display: block;
+        }
+
+        .form-group>span:not(:first-child):not(:last-child),
+        .form-group .form-field:not(:first-child):not(:last-child) {
+            border-radius: 0;
+        }
+
+        .form-group>span:first-child,
+        .form-group .form-field:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+
+        .form-group>span:last-child,
+        .form-group .form-field:last-child {
+            border-radius: 0 6px 6px 0;
+        }
+
+        .form-group>span:not(:first-child),
+        .form-group .form-field:not(:first-child) {
+            margin-left: -1px;
+        }
+
+        .form-group .form-field {
+            position: relative;
+            z-index: 1;
+            flex: 1 1 auto;
+            width: 1%;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .form-group>span {
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 14px;
+            line-height: 25px;
+            color: var(--group-color);
+            background: var(--group-background);
+            border: 1px solid var(--group-border);
+            transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+        }
+
+        .form-group:focus-within>span {
+            color: var(--group-color-focus);
+            background: var(--group-background-focus);
+            border-color: var(--group-border-focus);
+        }
+
+        html {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        * {
+            box-sizing: inherit;
+        }
+
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+
+        .form-group {
+            max-width: 360px;
+        }
+
+        .form-group:not(:last-child) {
+            margin-bottom: 32px;
+        }
+        .overlay{
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: rgba(0, 0, 0, 0.89);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: yellow;
+            font-size: 30;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/logout"><div class="logout"><p class="logout-text">Logout</p><i class="fas fa-sign-out-alt"></i></div></a>
+    <div class="leftpannel">
+        <div class="proilecont">
+            <div class="profile_picture"></div>
+            <h5 style="font-family: Roboto; font-size: 20px;" class="profilename" id="profilename">{{ user.first_name }}</h5>
+            <h8 style="font-family: Roboto; font-size: 16px;" class="profilename">({{ user.email }})</h8>
+        </div>
+        <div class="navs">
+            <ul class="nav">
+                <li onclick="location.href='/';"><i class="fas fa-heart" style="color: red;"></i><p style="margin-right: 5px;"></p>  Dashboard</li>
+                <li class="active" onclick="location.href='/diagnose';"><i class="fas fa-diagnoses" style="color: white;"></i><p style="margin-right: 5px;"></p>Diagnose</li>
+                <li onclick="location.href='/social';"><i class="fas fa-share-alt" style="color: blue;"></i><p style="margin-right: 5px;"></p>Social Help</li>
+                <li onclick="location.href='/blog';"><i class="fas fa-blog" style="color: blue;"></i><p style="margin-right: 5px;"></p>Health Blog</li>
+                <li onclick="location.href='/chat';"><i class="far fa-comments" style="color: blue;"></i><p style="margin-right: 5px;"></p>Chat Rooms</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div id="main">
+                <div class="row">
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Age</span>
+                            <input class="form-field" type="text" placeholder=" " name="Age">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>cp</span>
+                            <input class="form-field" type="text" placeholder=" " name="cp">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Sex</span>
+                            <input class="form-field" type="text" placeholder=" " name="Sex">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>thalach</span>
+                            <input class="form-field" type="text" placeholder=" " name="thalach">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Treshbps</span>
+                            <input class="form-field" type="text" placeholder=" " name="Treshbps">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>exang</span>
+                            <input class="form-field" type="text" placeholder=" " name="exang">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Chol</span>
+                            <input class="form-field" type="text" placeholder=" " name="Chol">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>oldpeak</span>
+                            <input class="form-field" type="text" placeholder=" " name="oldpeak">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Fbs</span>
+                            <input class="form-field" type="text" placeholder=" " name="Fbs">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>ca</span>
+                            <input class="form-field" type="text" placeholder=" " name="ca">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Restecg</span>
+                            <input class="form-field" type="text" placeholder=" " name="Restecg">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>thal</span>
+                            <input class="form-field" type="text" placeholder=" " name="thal">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="form-group" style="margin-top: 20px">
+                            <span>Slope</span>
+                            <input class="form-field" type="text" placeholder=" " name="slope">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="submit" value="Submit" class="btn">
+                </div>
+        </form>
+    </div>
+    {% if data %}
+    <div class="overlay">
+        {{ data }}
+    </div>
+    <script>
+        setTimeout(function(){
+           window.location.href = '/diagnose';
+        }, 3000);
+     </script>
+    {% endif %}
+    </body>
+
+</html>
